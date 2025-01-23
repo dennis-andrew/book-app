@@ -32,21 +32,28 @@ class _CartPageState extends State<CartPage> {
         title: const Text('Cart'),
         backgroundColor: Colors.amber,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: Cart.cartItems.length,
-              itemBuilder: (context, index) {
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                 final item = Cart.cartItems[index];
                 return Dismissible(
                   key: Key(index.toString()),
+                  onDismissed: (direction) {
+                    setState(() {
+                      Cart.removeFromCart(item);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Removed from Cart!')),
+                    );
+                  },
                   child: Card(
                     margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     elevation: 4,
                     child: ListTile(
                       title: Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text('by ${item.author}'),
+                      subtitle: Text('by ${item.author.name}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -68,25 +75,28 @@ class _CartPageState extends State<CartPage> {
                   ),
                 );
               },
+              childCount: Cart.cartItems.length,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text('Total: \$${Cart.getTotal()}',
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const PaymentPage())
-                    );
-                  },
-                  child: const Text('Proceed to Payment'),
-                ),
-              ],
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text('Total: \$${Cart.getTotal()}',
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const PaymentPage())
+                      );
+                    },
+                    child: const Text('Proceed to Payment'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
