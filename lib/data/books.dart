@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:book_app/book.dart';
+import 'package:book_app/models/book.dart';
 
 String booksJson = '''
 [

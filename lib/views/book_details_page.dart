@@ -1,6 +1,8 @@
+import 'package:book_app/bloc/cart/cart_bloc.dart';
+import 'package:book_app/bloc/cart/cart_event.dart';
 import 'package:flutter/material.dart';
-import 'package:book_app/book.dart';
-import 'package:book_app/cart_page.dart';
+import 'package:book_app/models/book.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookDetailsPage extends StatelessWidget {
   final Book book;
@@ -32,7 +34,7 @@ class BookDetailsPage extends StatelessWidget {
             const Spacer(),
             ElevatedButton(
               onPressed: () {
-                Cart.addToCart(book);
+                context.read<CartBloc>().add(AddToCartEvent(book));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Added to Cart!')),
                 );

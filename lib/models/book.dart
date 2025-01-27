@@ -22,7 +22,7 @@
 
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:book_app/author.dart';
+import 'package:book_app/models/author.dart';
 
 part 'book.g.dart';
 
