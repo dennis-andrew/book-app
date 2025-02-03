@@ -7,6 +7,9 @@ import 'package:book_app/bloc/book_list/book_list_event.dart';
 import 'package:book_app/bloc/book_list/book_list_state.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
+import '../bloc/theme/theme_bloc.dart';
+import '../bloc/theme/theme_event.dart';
+
 class BookListPage extends StatelessWidget {
   const BookListPage({super.key});
 
@@ -15,7 +18,12 @@ class BookListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Books', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.amber,
+        leading: IconButton(
+          icon: context.watch<ThemeBloc>().state.themeMode == ThemeMode.light ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
+          onPressed:  (){
+            context.read<ThemeBloc>().add(ToggleTheme());
+          }
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),
@@ -47,12 +55,8 @@ class BookListPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                DropdownButton<String>(
-                  value: context.watch<BookListBloc>().state is BookListLoadedState
-                      ? (context.read<BookListBloc>().state as BookListLoadedState).filteredBooks.isEmpty
-                      ? 'All'
-                      : 'All'
-                      : 'All',
+                DropdownButton(
+                  value: 'All',
                   onChanged: (String? newValue) {
                     if (newValue != null) {
                       context.read<BookListBloc>().add(FilterBooksByPriceEvent(newValue));
@@ -63,7 +67,7 @@ class BookListPage extends StatelessWidget {
                       .toList(),
                 ),
                 const SizedBox(width: 8),
-                DropdownButton<String>(
+                DropdownButton(
                   value: 'Title (Ascending)',
                   onChanged: (String? newValue) {
                     if (newValue != null) {
@@ -152,13 +156,6 @@ class BookListPage extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    backgroundColor: Colors.amber, // Button color
-                                  ),
                                   onPressed: () {
                                     Navigator.push(
                                       context,

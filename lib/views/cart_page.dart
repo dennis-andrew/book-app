@@ -1,8 +1,10 @@
 import 'package:book_app/bloc/cart/cart_bloc.dart';
 import 'package:book_app/bloc/cart/cart_event.dart';
 import 'package:book_app/bloc/cart/cart_state.dart';
+import 'package:book_app/views/address_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:book_app/views/payment_page.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -12,7 +14,6 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
-        backgroundColor: Colors.amber,
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
@@ -70,10 +71,10 @@ class CartPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const PaymentPage())
+                              MaterialPageRoute(builder: (context) => const AddressPage())
                           );
                         },
-                        child: const Text('Proceed to Payment'),
+                        child: const Text('Proceed For Payment'),
                       ),
                     ],
                   ),
@@ -87,21 +88,4 @@ class CartPage extends StatelessWidget {
   }
 }
 
-class PaymentPage extends StatelessWidget {
-  const PaymentPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Payment'),
-      ),
-      body: const Center(
-        child: Text(
-          'Payment Successful!',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
-        ),
-      ),
-    );
-  }
-}
